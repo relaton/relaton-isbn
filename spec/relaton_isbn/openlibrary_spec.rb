@@ -1,0 +1,56 @@
+describe RelatonIsbn::OpenLibrary do
+  context "get" do
+    it "success" do
+      expect do
+        expect(described_class).to receive(:request_api).with("ISBN 9780120644810").and_return :doc
+        bib = double "bib", docidentifier: [double("id", id: "id")]
+        expect(RelatonIsbn::Parser).to receive(:parse).with(:doc).and_return bib
+        expect(described_class.get("ISBN 9780120644810")).to eq bib
+      end.to output(include("[relaton-isbn] (ISBN 9780120644810) Fetching from OpenLibrary ...",
+                            "[relaton-isbn] (ISBN 9780120644810) Found: `id`")).to_stderr_from_any_process
+    end
+
+    it "not found" do
+      expect do
+        expect(described_class).to receive(:request_api).with("ISBN 9780120644810").and_return nil
+        expect(RelatonIsbn::Parser).not_to receive(:parse)
+        expect(described_class.get("ISBN 9780120644810")).to be_nil
+      end.to output(include("[relaton-isbn] (ISBN 9780120644810) Not found.")).to_stderr_from_any_process
+    end
+  end
+
+  context "request_api" do
+    let(:resp) { double "response" }
+
+    it "success" do
+      expect(URI).to receive(:parse).with("http://openlibrary.org/api/volumes/brief/isbn/9780120644810.json")
+        .and_return :uri
+      expect(resp).to receive(:is_a?).with(Net::HTTPSuccess).and_return true
+      expect(resp).to receive(:body).and_return '{"records": {"/books/OL21119585M": {"publishDates": ["2008"]}}}'
+      expect(Net::HTTP).to receive(:get_response).with(:uri).and_return resp
+      expect(described_class.request_api("ISBN 9780120644810")).to eq({ "publishDates" => ["2008"] })
+    end
+
+    it "incorrect ISBN" do
+      expect(URI).not_to receive(:parse)
+      expect(described_class.request_api("ISBN")).to be_nil
+    end
+
+    it "unsuccess" do
+      expect(URI).to receive(:parse).with("http://openlibrary.org/api/volumes/brief/isbn/9780120644810.json")
+        .and_return :uri
+      expect(resp).to receive(:is_a?).with(Net::HTTPSuccess).and_return false
+      expect(Net::HTTP).to receive(:get_response).with(:uri).and_return resp
+      expect(described_class.request_api("ISBN 9780120644810")).to be_nil
+    end
+
+    it "no records" do
+      expect(URI).to receive(:parse).with("http://openlibrary.org/api/volumes/brief/isbn/9780120644810.json")
+        .and_return :uri
+      expect(resp).to receive(:is_a?).with(Net::HTTPSuccess).and_return true
+      expect(resp).to receive(:body).and_return '{"records": {}}'
+      expect(Net::HTTP).to receive(:get_response).with(:uri).and_return resp
+      expect(described_class.request_api("ISBN 9780120644810")).to be_nil
+    end
+  end
+end
