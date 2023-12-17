@@ -11,7 +11,7 @@ image:https://img.shields.io/github/commits-since/relaton/relaton-isbn/latest.sv
 RelatonIsbn is a Ruby gem that implements the
 https://github.com/metanorma/metanorma-model-iso#iso-bibliographic-item[IsoBibliographicItem model].
 
-You can use it to retrieve metadata of Standards from https://crossref.org, and
+You can use it to retrieve metadata of Standards from https://openlibrary.org, and
 access such metadata through the `BibliographicItem` object.
 
 == Installation
@@ -53,20 +53,80 @@ RelatonIsbn.configure do |config|
 end
 ----
 
-=== Retrieving items of known type using OpenLibrary API
+=== Retrieving bibliographic items using OpenLibrary API
 
-If the resulting bibliographic item returned from CrossRef is a known Relaton
-flavor, such as a NIST or IEEE standard, the corresponding Relaton class object
-will be returned via the call.
+To retrieve bibliographic items, use `RelatonIsbn::OpenLibrary.get` method with ISBN-10 or ISBN-13 as an argument. Prefix `ISBN` and hyphens are optional. The method returns `RelatonBib::BibliographicItem` object.
 
 [source,ruby]
 ----
-# get document by ISBN
-RelatonIsbn::OpenLibrary.get "ISBN 9780120644810"
+# get document by ISBN-13
+> bibitem = RelatonIsbn::OpenLibrary.get "ISBN 978-0-12-064481-0"
 [relaton-isbn] (ISBN 9780120644810) Fetching from OpenLibrary ...
 [relaton-isbn] (ISBN 9780120644810) Found: `9780120644810`
 => #<RelatonBib::BibliographicItem:0x0000000113889258
 ...
+
+# get document by ISBN-10
+> RelatonIsbn::OpenLibrary.get "0120644819"
+[relaton-isbn] (ISBN 0120644819) Fetching from OpenLibrary ...
+[relaton-isbn] (ISBN 0120644819) Found: `9780120644810`
+=> #<RelatonBib::BibliographicItem:0x00000001098ac960
+...
+----
+
+=== Serializing bibliographic items
+[source,ruby]
+----
+# serialize to XML
+> puts bibitem.to_xml
+<bibitem id="9780120644810" schema-version="v1.2.7">
+  <title type="main" format="text/plain">Graphics gems II</title>
+  <uri type="src">http://openlibrary.org/books/OL21119585M/Graphics_gems_II</uri>
+  <docidentifier type="ISBN" primary="true">9780120644810</docidentifier>
+  <date type="published">
+    <on>1991</on>
+  </date>
+  <contributor>
+    <role type="author"/>
+    <person>
+      <name>
+        <completename>James Arvo</completename>
+      </name>
+    </person>
+  </contributor>
+  <contributor>
+    <role type="publisher"/>
+    <organization>
+      <name>AP Professional</name>
+    </organization>
+  </contributor>
+  <place>
+    <city>Boston</city>
+  </place>
+  <place>
+    <city>London</city>
+  </place>
+</bibitem>
+
+# serialize to bibdata XML
+> puts bibitem.to_xml bibdata: true
+<bibdata schema-version="v1.2.7">
+  <title type="main" format="text/plain">Graphics gems II</title>
+  ...
+
+# serialize to hash
+> bibitem.to_hash
+=> {"schema-version"=>"v1.2.7",
+ "id"=>"9780120644810",
+ "title"=>[{"content"=>"Graphics gems II", "format"=>"text/plain", "type"=>"main"}],
+ "link"=>[{"content"=>"http://openlibrary.org/books/OL21119585M/Graphics_gems_II", "type"=>"src"}],
+ "docid"=>[{"id"=>"9780120644810", "type"=>"ISBN", "primary"=>true}],
+ "date"=>[{"type"=>"published", "value"=>"1991"}],
+ "contributor"=>
+  [{"person"=>{"name"=>{"completename"=>{"content"=>"James Arvo"}}, "url"=>"http://openlibrary.org/authors/OL2646519A/James_Arvo"}, "role"=>[{"type"=>"author"}]},
+   {"organization"=>{"name"=>[{"content"=>"AP Professional"}]}, "role"=>[{"type"=>"publisher"}]}],
+ "revdate"=>"1991",
+ "place"=>[{"city"=>"Boston"}, {"city"=>"London"}]}
 ----
 
 == Development
