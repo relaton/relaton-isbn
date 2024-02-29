@@ -6,7 +6,7 @@ module RelatonIsbn
     # @param [String] isbn ISBN 13 number
     #
     def initialize(isbn)
-      @isbn = isbn&.delete("-")&.sub(/^ISBN\s/, "")
+      @isbn = isbn&.delete("-")&.sub(/^ISBN[\s:]/i, "")
     end
 
     def parse

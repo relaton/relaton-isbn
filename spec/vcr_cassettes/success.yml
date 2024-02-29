@@ -13,8 +13,6 @@ http_interactions:
       - "*/*"
       User-Agent:
       - Ruby
-      Host:
-      - openlibrary.org
   response:
     status:
       code: 200
@@ -23,7 +21,7 @@ http_interactions:
       Server:
       - nginx/1.18.0 (Ubuntu)
       Date:
-      - Wed, 03 Jan 2024 04:57:06 GMT
+      - Thu, 29 Feb 2024 00:50:22 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -31,7 +29,7 @@ http_interactions:
       Connection:
       - keep-alive
       X-Ol-Stats:
-      - '"IB 5 0.151 MC 11 0.004 TT 0 0.180"'
+      - '"IB 6 0.115 MC 13 0.012 OT 1 0.330 TT 0 0.495"'
       Referrer-Policy:
       - no-referrer-when-downgrade
     body:
@@ -102,5 +100,5 @@ http_interactions:
         YXN0X21vZGlmaWVkIjogeyJ0eXBlIjogIi90eXBlL2RhdGV0aW1lIiwgInZh
         bHVlIjogIjIwMjMtMDQtMDRUMDQ6MzM6MjguNDQ5MzUzIn19fX19LCAiaXRl
         bXMiOiBbXX0=
-  recorded_at: Wed, 03 Jan 2024 04:57:06 GMT
+  recorded_at: Thu, 29 Feb 2024 00:50:22 GMT
 recorded_with: VCR 6.2.0

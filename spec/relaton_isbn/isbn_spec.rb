@@ -29,6 +29,16 @@ describe RelatonIsbn::Isbn do
     it "with nil" do
       expect(described_class.new(nil).parse).to be_nil
     end
+
+    context "with prefix" do
+      it "ISBN" do
+        expect(described_class.new("ISBN 0-12-064481-9").parse).to eq "9780120644810"
+      end
+
+      it "isbn:" do
+        expect(described_class.new("isbn:0-12-064481-9").parse).to eq "9780120644810"
+      end
+    end
   end
 
   context "check ISBN" do

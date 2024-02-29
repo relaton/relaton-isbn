@@ -55,21 +55,21 @@ end
 
 === Retrieving bibliographic items using OpenLibrary API
 
-To retrieve bibliographic items, use `RelatonIsbn::OpenLibrary.get` method with ISBN-10 or ISBN-13 as an argument. Prefix `ISBN` and hyphens are optional. The method returns `RelatonBib::BibliographicItem` object.
+To retrieve bibliographic items, use `RelatonIsbn::OpenLibrary.get` method with ISBN-10 or ISBN-13 as an argument. Allowed prefixes are `ISBN`, `isbn:`. Prefix and hyphens are optional. The method returns `RelatonBib::BibliographicItem` object.
 
 [source,ruby]
 ----
 # get document by ISBN-13
-> bibitem = RelatonIsbn::OpenLibrary.get "ISBN 978-0-12-064481-0"
+> ibitem = RelatonIsbn::OpenLibrary.get "ISBN 978-0-12-064481-0"
 [relaton-isbn] (ISBN 9780120644810) Fetching from OpenLibrary ...
 [relaton-isbn] (ISBN 9780120644810) Found: `9780120644810`
 => #<RelatonBib::BibliographicItem:0x0000000113889258
 ...
 
 # get document by ISBN-10
-> RelatonIsbn::OpenLibrary.get "0120644819"
-[relaton-isbn] (ISBN 0120644819) Fetching from OpenLibrary ...
-[relaton-isbn] (ISBN 0120644819) Found: `9780120644810`
+> RelatonIsbn::OpenLibrary.get "isbn:0120644819"
+[relaton-isbn] (isbn:0120644819) Fetching from OpenLibrary ...
+[relaton-isbn] (isbn:0120644819) Found: `9780120644810`
 => #<RelatonBib::BibliographicItem:0x00000001098ac960
 ...
 ----
