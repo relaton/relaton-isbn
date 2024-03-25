@@ -8,22 +8,22 @@ module RelatonIsbn
     ENDPOINT = "http://openlibrary.org/api/volumes/brief/isbn/".freeze
 
     def get(ref, _date = nil, _opts = {}) # rubocop:disable Metrics/MethodLength
-      Util.warn "(#{ref}) Fetching from OpenLibrary ..."
+      Util.info "Fetching from OpenLibrary ...", key: ref
 
       isbn = Isbn.new(ref).parse
       unless isbn
-        Util.warn "(#{ref}) Incorrect ISBN."
+        Util.info "Incorrect ISBN.", key: ref
         return
       end
 
       resp = request_api isbn
       unless resp
-        Util.warn "(#{ref}) Not found."
+        Util.info "Not found.", key: ref
         return
       end
 
       bib = Parser.parse resp
-      Util.warn "(#{ref}) Found: `#{bib.docidentifier.first.id}`"
+      Util.info "Found: `#{bib.docidentifier.first.id}`", key: ref
       bib
     end
 

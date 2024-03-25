@@ -1,7 +1,6 @@
 require "net/http"
 require "relaton_bib"
 require_relative "relaton_isbn/version"
-require_relative "relaton_isbn/config"
 require_relative "relaton_isbn/util"
 require_relative "relaton_isbn/isbn"
 require_relative "relaton_isbn/parser"

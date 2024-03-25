@@ -6,8 +6,8 @@ describe RelatonIsbn::OpenLibrary do
         bib = double "bib", docidentifier: [double("id", id: "id")]
         expect(RelatonIsbn::Parser).to receive(:parse).with(:doc).and_return bib
         expect(described_class.get("ISBN 9780120644810")).to eq bib
-      end.to output(include("[relaton-isbn] (ISBN 9780120644810) Fetching from OpenLibrary ...",
-                            "[relaton-isbn] (ISBN 9780120644810) Found: `id`")).to_stderr_from_any_process
+      end.to output(include("[relaton-isbn] INFO: (ISBN 9780120644810) Fetching from OpenLibrary ...",
+                            "[relaton-isbn] INFO: (ISBN 9780120644810) Found: `id`")).to_stderr_from_any_process
     end
 
     it "not found" do
@@ -15,14 +15,14 @@ describe RelatonIsbn::OpenLibrary do
         expect(described_class).to receive(:request_api).with("9780120644810").and_return nil
         expect(RelatonIsbn::Parser).not_to receive(:parse)
         expect(described_class.get("ISBN 9780120644810")).to be_nil
-      end.to output(include("[relaton-isbn] (ISBN 9780120644810) Not found.")).to_stderr_from_any_process
+      end.to output(include("[relaton-isbn] INFO: (ISBN 9780120644810) Not found.")).to_stderr_from_any_process
     end
 
     it "incorrect ISBN" do
       expect do
         expect(described_class).not_to receive(:request_api)
         expect(described_class.get("ISBN")).to be_nil
-      end.to output(include("[relaton-isbn] (ISBN) Incorrect ISBN.")).to_stderr_from_any_process
+      end.to output(include("[relaton-isbn] INFO: (ISBN) Incorrect ISBN.")).to_stderr_from_any_process
     end
   end
 
