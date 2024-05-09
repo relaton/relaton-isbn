@@ -47,10 +47,10 @@ describe RelatonIsbn::Parser do
       expect(title).to be_instance_of Array
       expect(title.size).to eq 2
       expect(title.first).to be_instance_of RelatonBib::TypedTitleString
-      expect(title.first.title.content).to eq "Title"
+      expect(title.first.to_s).to eq "Title"
       expect(title.first.type).to eq "main"
       expect(title.last).to be_instance_of RelatonBib::TypedTitleString
-      expect(title.last.title.content).to eq "Subtitle"
+      expect(title.last.to_s).to eq "Subtitle"
       expect(title.last.type).to eq "subtitle"
     end
 
@@ -83,7 +83,7 @@ describe RelatonIsbn::Parser do
       authors = subject.send :contributor
       expect(authors).to be_instance_of Array
       expect(authors.size).to eq 2
-      expect(authors.first).to be_instance_of RelatonBib::ContributionInfo
+      expect(authors.first).to be_instance_of RelatonBib::Contributor
       expect(authors.first.entity).to be_instance_of RelatonBib::Person
       expect(authors.first.entity.name.completename.content).to eq "James Arvo"
       expect(authors.first.entity.url.to_s).to eq "https://openlibrary.org/authors/OL21119585M/James_Arvo"
