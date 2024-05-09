@@ -45,14 +45,14 @@ module RelatonIsbn
       @doc["data"]["authors"].map do |a|
         name = RelatonBib::FullName.new completename: RelatonBib::LocalizedString.new(a["name"])
         entity = RelatonBib::Person.new name: name, url: a["url"]
-        RelatonBib::ContributionInfo.new entity: entity, role: [{ type: "author" }]
+        RelatonBib::Contributor.new entity: entity, role: [{ type: "author" }]
       end
     end
 
     def creaate_publishers
       @doc["data"]["publishers"].map do |p|
         entity = RelatonBib::Organization.new name: RelatonBib::LocalizedString.new(p["name"])
-        RelatonBib::ContributionInfo.new entity: entity, role: [{ type: "publisher" }]
+        RelatonBib::Contributor.new entity: entity, role: [{ type: "publisher" }]
       end
     end
 
