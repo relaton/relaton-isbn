@@ -33,7 +33,7 @@ Gem::Specification.new do |spec| # rubocop:disable Metrics/BlockLength
   spec.require_paths = ["lib"]
 
   # Uncomment to register a new dependency of your gem
-  spec.add_dependency "relaton-bib", "~> 1.19.0"
+  spec.add_dependency "relaton-bib", "~> 1.20.0"
 
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html
