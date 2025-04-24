@@ -3,7 +3,7 @@ module RelatonIsbn
   # OpenLibrary document parser.
   #
   class Parser
-    ATTRS = %i[title docid link contributor date place].freeze
+    ATTRS = %i[fetched title docid link contributor date place].freeze
 
     def initialize(doc)
       @doc = doc
@@ -19,6 +19,8 @@ module RelatonIsbn
     end
 
     private
+
+    def fetched = Date.today.to_s
 
     def title
       t = [RelatonBib::TypedTitleString.new(content: @doc["data"]["title"], type: "main")]

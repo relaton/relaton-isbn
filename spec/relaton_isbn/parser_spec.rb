@@ -28,18 +28,14 @@ describe RelatonIsbn::Parser do
   end
 
   context "instance methods" do
-    it "#parse" do
-      parser = described_class.new :doc
-      expect(parser).to receive(:title).and_return :title
-      expect(parser).to receive(:docid).and_return :docid
-      expect(parser).to receive(:link).and_return :link
-      expect(parser).to receive(:contributor).and_return :contributor
-      expect(parser).to receive(:date).and_return :date
-      expect(parser).to receive(:place).and_return :place
-      expect(RelatonBib::BibliographicItem).to receive(:new).with(
-        title: :title, docid: :docid, link: :link, contributor: :contributor, date: :date, place: :place,
-      ).and_return :bib
-      expect(parser.parse).to eq :bib
+    context "#parse" do
+      let(:doc) { JSON.parse File.read("spec/fixtures/9780120644810.json", encoding: "utf-8") }
+      subject { described_class.new(doc["records"].first.last).parse }
+      it { is_expected.to be_instance_of RelatonBib::BibliographicItem }
+    end
+
+    it "#fetched" do
+      expect(subject.send(:fetched)).to eq Date.today.to_s
     end
 
     it "#title" do
